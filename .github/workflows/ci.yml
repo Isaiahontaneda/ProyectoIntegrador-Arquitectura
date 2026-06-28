@@ -1,0 +1,123 @@
+name: CI – Build & Test
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+
+  # ── Lint & install per service ──────────────────────────
+  build-storefront:
+    name: Build storefront-api
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: storefront-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: storefront-api/package-lock.json
+      - run: npm ci --production
+      - run: npm test
+
+  build-admin:
+    name: Build admin-api
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: admin-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: admin-api/package-lock.json
+      - run: npm ci --production
+      - run: npm test
+
+  build-search-lambda:
+    name: Build search-lambda
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: search-lambda
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: search-lambda/package-lock.json
+      - run: npm ci --production
+      - run: npm test
+
+  build-notifications:
+    name: Build notifications-service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: notifications-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: notifications-service/package-lock.json
+      - run: npm ci --production
+      - run: npm test
+
+  # ── Docker Compose integration test ────────────────────
+  integration:
+    name: Integration – docker compose up
+    runs-on: ubuntu-latest
+    needs: [build-storefront, build-admin, build-search-lambda, build-notifications]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env files for CI
+        run: |
+          cp storefront-api/.env.example storefront-api/.env 2>/dev/null || true
+          cp admin-api/.env.example admin-api/.env 2>/dev/null || true
+          cp search-lambda/.env.example search-lambda/.env 2>/dev/null || true
+          cp notifications-service/.env.example notifications-service/.env 2>/dev/null || true
+
+      - name: Start all services
+        run: docker compose up -d --build
+        timeout-minutes: 10
+
+      - name: Wait for services to be healthy
+        run: |
+          echo "Waiting for API Gateway..."
+          timeout 120 bash -c 'until curl -sf http://localhost:8000/store/health; do sleep 3; done'
+          echo "Storefront OK"
+          timeout 60 bash -c 'until curl -sf http://localhost:8000/admin/health; do sleep 3; done'
+          echo "Admin OK"
+          timeout 60 bash -c 'until curl -sf http://localhost:8000/search/health; do sleep 3; done'
+          echo "Search Lambda OK"
+
+      - name: Smoke test – list products
+        run: |
+          curl -sf http://localhost:8000/store/products | jq '.[] | .name'
+
+      - name: Smoke test – search endpoint
+        run: |
+          curl -sf "http://localhost:8000/search/search?q=laptop" | jq '.total'
+
+      - name: Smoke test – admin inventory
+        run: |
+          curl -sf http://localhost:8000/admin/inventory | jq 'length'
+
+      - name: Collect logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

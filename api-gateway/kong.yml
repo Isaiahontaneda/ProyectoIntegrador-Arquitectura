@@ -1,0 +1,107 @@
+_format_version: "3.0"
+
+# ═══════════════════════════════════════════════════════════
+#  Kong API Gateway – Declarative Configuration
+#  Routes all external traffic to internal microservices.
+#  Plugins applied: rate-limiting, cors, correlation-id
+# ═══════════════════════════════════════════════════════════
+
+# ── Global plugins ─────────────────────────────────────────
+plugins:
+  - name: cors
+    config:
+      origins:
+        - "*"
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      headers:
+        - Accept
+        - Content-Type
+        - Authorization
+        - X-Request-ID
+      exposed_headers:
+        - X-Cache
+        - X-Request-ID
+      max_age: 3600
+
+  - name: correlation-id
+    config:
+      header_name: X-Request-ID
+      generator: uuid
+      echo_downstream: true
+
+# ── Services & Routes ──────────────────────────────────────
+services:
+
+  # ── Storefront (customer-facing) ───────────────────────
+  - name: storefront-service
+    url: http://storefront-api:3001
+    connect_timeout: 5000
+    read_timeout:    30000
+    write_timeout:   30000
+    routes:
+      - name: storefront-route
+        paths:
+          - /store
+        strip_path: true
+        methods:
+          - GET
+          - POST
+          - OPTIONS
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 120
+          hour:   2000
+          policy: local
+
+  # ── Admin API (internal) ───────────────────────────────
+  - name: admin-service
+    url: http://admin-api:3002
+    connect_timeout: 5000
+    read_timeout:    30000
+    write_timeout:   30000
+    routes:
+      - name: admin-route
+        paths:
+          - /admin
+        strip_path: true
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 60
+          hour:   1000
+          policy: local
+
+  # ── Search Lambda (serverless functions) ───────────────
+  - name: search-service
+    url: http://search-lambda:3003
+    connect_timeout: 5000
+    read_timeout:    15000
+    write_timeout:   15000
+    routes:
+      - name: search-route
+        paths:
+          - /search
+        strip_path: true
+        methods:
+          - GET
+          - OPTIONS
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 200
+          hour:   5000
+          policy: local

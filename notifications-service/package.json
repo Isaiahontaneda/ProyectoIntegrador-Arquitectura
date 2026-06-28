@@ -1,0 +1,16 @@
+{
+  "name": "notifications-service",
+  "version": "1.0.0",
+  "description": "Async notification consumer: order confirmations and low-stock alerts",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "dotenv": "^16.3.1",
+    "nodemailer": "^6.9.7"
+  }
+}

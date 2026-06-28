@@ -1,0 +1,121 @@
+.navbar {
+  background: #040d1f;
+  border-bottom: 1px solid rgba(59,130,246,.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 20px rgba(0,0,0,.4);
+}
+
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Brand */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.navbar-logo {
+  height: 32px;
+  width: auto;
+  filter: drop-shadow(0 0 8px rgba(59,130,246,.4));
+}
+.navbar-name {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  letter-spacing: -.2px;
+}
+.navbar-name strong {
+  color: #e2e8f0;
+  font-weight: 700;
+}
+
+/* Nav links */
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+}
+.navbar-links a {
+  font-size: .9rem;
+  font-weight: 500;
+  color: #64748b;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.navbar-links a:hover,
+.navbar-links a.active {
+  color: #60a5fa;
+  border-bottom-color: #3b82f6;
+}
+
+/* Admin badge */
+.navbar-admin-badge {
+  flex: 1;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #818cf8;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* User area */
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-left: auto;
+}
+.navbar-user-name {
+  font-size: .85rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Login button (guest) */
+.navbar-login-btn {
+  background: rgba(47,123,255,.12);
+  border: 1px solid rgba(47,123,255,.3);
+  border-radius: 6px;
+  padding: .35rem .75rem;
+  color: #60a5fa;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.navbar-login-btn:hover {
+  background: rgba(47,123,255,.22);
+  border-color: rgba(47,123,255,.5);
+}
+
+/* Logout button */
+.navbar-logout {
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.2);
+  border-radius: 6px;
+  padding: .35rem .65rem;
+  color: #f87171;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  transition: background .15s, border-color .15s;
+}
+.navbar-logout:hover {
+  background: rgba(239,68,68,.15);
+  border-color: rgba(239,68,68,.4);
+}
