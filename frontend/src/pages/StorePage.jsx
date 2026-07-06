@@ -45,6 +45,18 @@ const IcoLogout = () => (
   </svg>
 )
 
+// ─── Product images ──────────────────────────────────
+const PRODUCT_IMAGES = {
+  'Desk Lamp':          'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311154/Desk_Lamp_ppolpc.jpg',
+  'Laptop Bag':         'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311161/Laptop_bag_uoh0gn.jpg',
+  'Laptop Pro':         'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311169/Laptop_pro_e30xa9.jpg',
+  'Mechanical Keyboard':'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311518/Mechanical_Keyboard_mq8nfq.jpg',
+  'Monitor Stand':      'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311534/Monitor_stand_eodoyv.jpg',
+  'USB-C Hub':          'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311526/USB_C_glfmfx.jpg',
+  'Webcam HD':          'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311581/Webcam_HD_u7646u.jpg',
+  'Wireless Mouse':     'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311136/Wireless_Mouse_irwxil.jpg',
+}
+
 // ─── Category icon paths ──────────────────────────────
 const CAT_ICONS = {
   'Electrónica':   'M7 14a5 5 0 0 1 10 0M9 18h6M12 8V5',
@@ -139,10 +151,6 @@ export default function StorePage() {
           </button>
         )}
 
-        <button className="sf-icon-btn sf-cart-btn">
-          <IcoCart />
-          {cartCount > 0 && <span className="sf-cart-badge">{cartCount}</span>}
-        </button>
       </header>
 
       {/* ── Nav ── */}
@@ -161,9 +169,6 @@ export default function StorePage() {
 
       {/* ── Hero ── */}
       <section className="sf-hero">
-        <div className="sf-hero-glow" />
-        <div className="sf-hero-circle" />
-
         <div className="sf-hero-content">
           <h1 className="sf-hero-title">Encuentra lo<br />que necesitas</h1>
           <p className="sf-hero-sub">Descubre productos increíbles con la mejor calidad y precio.</p>
@@ -173,12 +178,6 @@ export default function StorePage() {
           >
             Ver productos
           </button>
-        </div>
-
-        <div className="sf-hero-products">
-          <div className="sf-hero-prod sf-hero-prod--sm" />
-          <div className="sf-hero-prod sf-hero-prod--lg" />
-          <div className="sf-hero-prod sf-hero-prod--md" />
         </div>
       </section>
 
@@ -230,7 +229,10 @@ export default function StorePage() {
                 {products.map(p => (
                   <div key={p.id} className="sf-prod-card">
                     <div className="sf-prod-img">
-                      <span className="sf-prod-img-label">product photo</span>
+                      {PRODUCT_IMAGES[p.name]
+                        ? <img src={PRODUCT_IMAGES[p.name]} alt={p.name} className="sf-prod-img-photo" />
+                        : <span className="sf-prod-img-label">product photo</span>
+                      }
                       <button className="sf-prod-wish"><IcoHeart /></button>
                     </div>
                     <div className="sf-prod-body">

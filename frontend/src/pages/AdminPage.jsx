@@ -42,7 +42,6 @@ const NAV = [
   { id: 'inventory', label: 'Inventario', Icon: IcoInventory  },
   { id: 'orders',    label: 'Órdenes',    Icon: IcoOrders     },
   { id: 'products',  label: 'Productos',  Icon: IcoProducts   },
-  { id: 'clients',   label: 'Clientes',   Icon: IcoClients    },
 ]
 
 // ─── Main ────────────────────────────────────────────
@@ -70,7 +69,6 @@ export default function AdminPage() {
         {section === 'inventory'  && <InventorySection />}
         {section === 'orders'     && <OrdersSection />}
         {section === 'products'   && <ProductsSection />}
-        {section === 'clients'    && <ClientsSection />}
       </main>
     </div>
   )
@@ -340,18 +338,3 @@ function ProductsSection() {
   )
 }
 
-// ─── Clients placeholder ──────────────────────────────
-function ClientsSection() {
-  return (
-    <>
-      <h2 className="admin-page-title">Clientes</h2>
-      <div className="admin-placeholder">
-        <div className="admin-placeholder-icon">
-          <IcoClients />
-        </div>
-        <h4>Módulo de clientes</h4>
-        <p>Próximamente disponible</p>
-      </div>
-    </>
-  )
-}
