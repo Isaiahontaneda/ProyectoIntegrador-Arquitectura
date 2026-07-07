@@ -92,6 +92,20 @@
   flex-shrink: 0;
 }
 .sp-icon-btn:hover { border-color: #2f7bff; }
+.sp-logout-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid #1c3050;
+  background: transparent;
+  color: #9db4d6;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+  flex-shrink: 0;
+}
+.sp-logout-btn:hover { border-color: #2f7bff; color: #e8eef7; }
 
 /* ─── Nav ─────────────────────────────────────────── */
 .sp-nav {
@@ -303,6 +317,7 @@
   justify-content: center;
 }
 .sp-card-img-label { font-family: monospace; font-size: 10px; color: #7e96bb; }
+.sp-card-img-photo { width: 100%; height: 100%; object-fit: cover; }
 .sp-card-cat {
   position: absolute;
   top: 10px;

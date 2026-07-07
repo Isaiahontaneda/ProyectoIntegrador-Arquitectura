@@ -5,7 +5,18 @@ import { useAuth } from '../context/AuthContext.jsx'
 import OrderModal from '../components/OrderModal.jsx'
 import './SearchPage.css'
 
-const LOGO = 'https://res.cloudinary.com/dcabuupn1/image/upload/v1782172804/ChatGPT_Image_22_jun_2026_06_59_04_p.m_a7zxlb.png'
+const LOGO = 'https://res.cloudinary.com/dcabuupn1/image/upload/v1782615005/Logo_ECOMM_ttq36x.png'
+
+const PRODUCT_IMAGES = {
+  'Desk Lamp':          'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311154/Desk_Lamp_ppolpc.jpg',
+  'Laptop Bag':         'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311161/Laptop_bag_uoh0gn.jpg',
+  'Laptop Pro':         'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311169/Laptop_pro_e30xa9.jpg',
+  'Mechanical Keyboard':'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311518/Mechanical_Keyboard_mq8nfq.jpg',
+  'Monitor Stand':      'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311534/Monitor_stand_eodoyv.jpg',
+  'USB-C Hub':          'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311526/USB_C_glfmfx.jpg',
+  'Webcam HD':          'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311581/Webcam_HD_u7646u.jpg',
+  'Wireless Mouse':     'https://res.cloudinary.com/dcabuupn1/image/upload/v1783311136/Wireless_Mouse_irwxil.jpg',
+}
 
 const IcoSearch  = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -40,6 +51,13 @@ const IcoSimilar = () => (
 const IcoCache = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+  </svg>
+)
+const IcoLogout = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <polyline points="16 17 21 12 16 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
   </svg>
 )
 
@@ -123,7 +141,10 @@ export default function SearchPage() {
         {user ? (
           <div className="sp-user-row">
             <span className="sp-user-name">{user.name}</span>
-            <button className="sp-icon-btn" onClick={handleLogout} title="Cerrar sesión"><IcoUser /></button>
+            <button className="sp-logout-btn" onClick={handleLogout}>
+              <IcoLogout />
+              Cerrar sesión
+            </button>
           </div>
         ) : (
           <button className="sp-icon-btn" onClick={() => navigate('/login')} title="Iniciar sesión"><IcoUser /></button>
@@ -134,8 +155,6 @@ export default function SearchPage() {
       <nav className="sp-nav">
         <a className="sp-nav-link" onClick={() => navigate('/')}>Inicio</a>
         <a className="sp-nav-link active">Categorías</a>
-        <a className="sp-nav-link">Ofertas</a>
-        <a className="sp-nav-link">Contacto</a>
       </nav>
 
       {/* ── Main content ── */}
@@ -233,7 +252,10 @@ export default function SearchPage() {
                   {results.results.map(p => (
                     <div key={p.id} className="sp-card">
                       <div className="sp-card-img">
-                        <span className="sp-card-img-label">product photo</span>
+                        {PRODUCT_IMAGES[p.name]
+                          ? <img src={PRODUCT_IMAGES[p.name]} alt={p.name} className="sp-card-img-photo" />
+                          : <span className="sp-card-img-label">product photo</span>
+                        }
                         <span className="sp-card-cat">{p.category}</span>
                       </div>
                       <div className="sp-card-body">

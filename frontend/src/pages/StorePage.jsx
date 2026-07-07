@@ -163,8 +163,6 @@ export default function StorePage() {
           className="sf-nav-link"
           onClick={() => navigate('/search')}
         >Categorías</a>
-        <a className="sf-nav-link">Ofertas</a>
-        <a className="sf-nav-link">Contacto</a>
       </nav>
 
       {/* ── Hero ── */}
